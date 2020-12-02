@@ -5,6 +5,7 @@
  */
 package eshop1;
 
+import dbutils.Database;
 import java.util.Scanner;
 import models.Customer;
 
@@ -21,11 +22,16 @@ public class EShop1 {
      */
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        
-        Customer customer = new Customer();
         cmdutils.Customer cmdCustomer = new cmdutils.Customer(sc);
-        customer = cmdCustomer.askData();
-        System.out.println(customer);
+        cmdutils.Product  cmdProduct  = new cmdutils.Product(sc);
+        Database db = new Database();
+       
+//        System.out.println("Inserted: " + db.insertCustomer(cmdCustomer.askData(), 
+//                           "customers") + " record!");
+        
+        System.out.println("Inserted: " + db.insertProduct(cmdProduct.askData(), 
+                           "products") + " record!");
+        
     }
     
 }

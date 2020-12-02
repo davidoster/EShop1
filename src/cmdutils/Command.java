@@ -18,4 +18,16 @@ public class Command {
         return(sc.nextLine());
     }
     
+    public double getDoubleField(Scanner sc, String message) {
+        System.out.println(message);
+        //return(Double.parseDouble(sc.nextLine()));
+        return(sc.nextDouble());
+    }
+    
+    public int getIntField(Scanner sc, String message) {
+        System.out.println(message);
+        //return(Double.parseDouble(sc.nextLine()));
+        return(sc.nextInt());
+    }
+    
 }
