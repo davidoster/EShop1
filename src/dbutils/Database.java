@@ -12,11 +12,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Customer;
 import models.Product;
+import models.ProductIdQuantity;
 
 /**
  *
@@ -110,12 +113,16 @@ public class Database {
                     1.2 PRINT customers
                     1.3 From cmd choose customer
             Step    2 - Select products
+                    2.1 SELECT * FROM products
+                    2.2 PRINT products
+                    2.3 From cmd choose products
             Step    3 - Sum products
             Step    4 - insertOrder()
             Step    5 - insertProducts()
         */
-        int customerId = selectCustomer(sc);
-        
+//        int customerId = selectCustomer(sc);
+        List<ProductIdQuantity> productsIdsQuantities = selectProducts(sc);
+        System.out.println(productsIdsQuantities);
         
         
         return(result);
@@ -141,6 +148,39 @@ public class Database {
         }
         
         return(customerId);
+    }
+    
+    public List<ProductIdQuantity> selectProducts(Scanner sc) {
+        List<ProductIdQuantity> productIdsQuantities = new ArrayList<>();
+        Command cmd = new Command();
+        
+        ResultSet rs;
+        try {
+            statement = con.createStatement();
+            rs = statement.executeQuery("SELECT * FROM products");
+            while(rs.next()) {
+                System.out.println(rs.getString("id") + ". " +
+                                   rs.getString("name"));
+            }
+            // we should check that the returned Ids are valid
+            int choice = 1;
+            while(choice == 1) {
+                // product id
+                int prId = cmd.getIntField(sc, "Please select a product to add");
+                
+                
+                // ask for quantity for the previous product
+                int quant = cmd.getIntField(sc, "Please type the quantity of the product with id: " + prId);
+                productIdsQuantities.add(new ProductIdQuantity(prId, quant));
+                
+                // ask if he would like to add one more product
+                choice = cmd.getIntField(sc, "Would you like to add 1 more product, "
+                                           + "if yes press 1 else press any other number");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return(productIdsQuantities);
     }
     
 }
