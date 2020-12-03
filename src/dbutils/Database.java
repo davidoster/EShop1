@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -120,13 +121,36 @@ public class Database {
             Step    4 - insertOrder()
             Step    5 - insertProductDetails()
         */
-//        int customerId = selectCustomer(sc);
+        int customerId = selectCustomer(sc);
         List<ProductDTO> productsIdsQuantities = selectProducts(sc);
         System.out.println(productsIdsQuantities);
         double sumPricesOfSelectedProducts = sumProductsPrices(productsIdsQuantities);
+        addOrder(customerId, sumPricesOfSelectedProducts, "orders2");
+        
+        return(result);
+    }
+    
+    public int addOrder(int customerId, double totalPrice, String tableName) {
         // INSERT INTO orders2(`customers_id`, `total_price`, `date`) 
         // VALUES(1, 187.65, "2020-12-03"), (1, 4128.3, "2020-12-03")
+        int result = 0;
+        StringBuilder sb = new StringBuilder();
         
+        sb.append("INSERT INTO ");
+        sb.append("`"); sb.append(tableName); sb.append("`");
+        sb.append("(`customers_id`, `total_price`, `date`)");
+        sb.append(" VALUES(");
+        sb.append("\""); sb.append(customerId); sb.append("\""); sb.append(",");
+        sb.append("\""); sb.append(totalPrice); sb.append("\""); sb.append(",");
+        sb.append("\""); sb.append(LocalDateTime.now()); sb.append("\"");
+        sb.append(")");
+        try {
+            //        System.out.println(sb.toString());
+            statement = con.createStatement();
+            result = statement.executeUpdate(sb.toString());
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return(result);
     }
     
