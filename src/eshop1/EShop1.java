@@ -29,8 +29,10 @@ public class EShop1 {
 //        System.out.println("Inserted: " + db.insertCustomer(cmdCustomer.askData(), 
 //                           "customers") + " record!");
         
-        System.out.println("Inserted: " + db.insertProduct(cmdProduct.askData(), 
-                           "products") + " record!");
+//        System.out.println("Inserted: " + db.insertProduct(cmdProduct.askData(), 
+//                           "products") + " record!");
+        
+         db.insertOrder(sc);
         
     }
     

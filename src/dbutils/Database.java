@@ -5,12 +5,14 @@
  */
 package dbutils;
 
+import cmdutils.Command;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Customer;
@@ -97,6 +99,48 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
         return(result);
+    }
+    
+    public int insertOrder(Scanner sc) {
+        int result = 0;
+        
+        /*  
+            Step    1 - Select customer 
+                    1.1 SELECT * FROM customers
+                    1.2 PRINT customers
+                    1.3 From cmd choose customer
+            Step    2 - Select products
+            Step    3 - Sum products
+            Step    4 - insertOrder()
+            Step    5 - insertProducts()
+        */
+        int customerId = selectCustomer(sc);
+        
+        
+        
+        return(result);
+    }
+    
+    public int selectCustomer(Scanner sc) {
+        int customerId = -1;
+        Command cmd = new Command();
+        
+        ResultSet rs;
+        try {
+            statement = con.createStatement();
+            rs = statement.executeQuery("SELECT * FROM customers");
+            while(rs.next()) {
+                System.out.println(rs.getString("id") + ". " +
+                                   rs.getString("first_name") + " " +
+                                   rs.getString("last_name"));
+            }
+            // we should check that the returned Id is valid
+            customerId = cmd.getIntField(sc, "Please select the customer");
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return(customerId);
     }
     
 }
