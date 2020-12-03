@@ -9,16 +9,18 @@ package models;
  *
  * @author George.Pasparakis
  */
-public class ProductIdQuantity {
+public class ProductDTO {
     private int productId;
     private int quantity;
+    private double price;
 
-    public ProductIdQuantity() {
+    public ProductDTO() {
     }
 
-    public ProductIdQuantity(int productId, int quantity) {
+    public ProductDTO(int productId, int quantity, double price) {
         this.productId = productId;
         this.quantity = quantity;
+        this.price = price;
     }
 
     public int getQuantity() {
@@ -37,11 +39,20 @@ public class ProductIdQuantity {
         this.productId = productId;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("ProductIdQuantity{productId=").append(productId);
         sb.append(", quantity=").append(quantity);
+        sb.append(", price=").append(price);
         sb.append('}');
         return sb.toString();
     }

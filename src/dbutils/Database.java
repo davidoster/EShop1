@@ -19,7 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Customer;
 import models.Product;
-import models.ProductIdQuantity;
+import models.ProductDTO;
 
 /**
  *
@@ -118,12 +118,14 @@ public class Database {
                     2.3 From cmd choose products
             Step    3 - Sum products
             Step    4 - insertOrder()
-            Step    5 - insertProducts()
+            Step    5 - insertProductDetails()
         */
 //        int customerId = selectCustomer(sc);
-        List<ProductIdQuantity> productsIdsQuantities = selectProducts(sc);
+        List<ProductDTO> productsIdsQuantities = selectProducts(sc);
         System.out.println(productsIdsQuantities);
-        
+        double sumPricesOfSelectedProducts = sumProductsPrices(productsIdsQuantities);
+        // INSERT INTO orders2(`customers_id`, `total_price`, `date`) 
+        // VALUES(1, 187.65, "2020-12-03"), (1, 4128.3, "2020-12-03")
         
         return(result);
     }
@@ -150,13 +152,13 @@ public class Database {
         return(customerId);
     }
     
-    public List<ProductIdQuantity> selectProducts(Scanner sc) {
-        List<ProductIdQuantity> productIdsQuantities = new ArrayList<>();
+    public List<ProductDTO> selectProducts(Scanner sc) {
+        List<ProductDTO> productIdsQuantities = new ArrayList<>();
         Command cmd = new Command();
         
         ResultSet rs;
         try {
-            statement = con.createStatement();
+            statement = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = statement.executeQuery("SELECT * FROM products");
             while(rs.next()) {
                 System.out.println(rs.getString("id") + ". " +
@@ -171,7 +173,9 @@ public class Database {
                 
                 // ask for quantity for the previous product
                 int quant = cmd.getIntField(sc, "Please type the quantity of the product with id: " + prId);
-                productIdsQuantities.add(new ProductIdQuantity(prId, quant));
+                rs.absolute(prId);
+                double price = rs.getDouble("price");
+                productIdsQuantities.add(new ProductDTO(prId, quant, price));
                 
                 // ask if he would like to add one more product
                 choice = cmd.getIntField(sc, "Would you like to add 1 more product, "
@@ -181,6 +185,14 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
         return(productIdsQuantities);
+    }
+    
+    public double sumProductsPrices(List<ProductDTO> products) {
+        double result = 0;
+        for (ProductDTO product : products) {
+            result += product.getPrice() * product.getQuantity();
+        }
+        return(result);
     }
     
 }
