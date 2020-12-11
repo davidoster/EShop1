@@ -5,11 +5,23 @@
  */
 package models;
 
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
 /**
  *
  * @author George.Pasparakis
  */
-public class Product {
+@Entity
+@Table(name = "products")
+public class Product implements Serializable {
+    @Id
+    @Column(name = "id")
+    private int Id;
     private String name;
     private double price;
     private int quantity;
@@ -22,6 +34,14 @@ public class Product {
         this.quantity = quantity;
     }
 
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int Id) {
+        this.Id = Id;
+    }
+    
     public String getName() {
         return name;
     }
@@ -49,12 +69,12 @@ public class Product {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Product{name=").append(name);
+        sb.append("Product{Id=").append(Id);
+        sb.append(", name=").append(name);
         sb.append(", price=").append(price);
         sb.append(", quantity=").append(quantity);
         sb.append('}');
         return sb.toString();
     }
-    
-    
+
 }

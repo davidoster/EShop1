@@ -42,7 +42,7 @@ public class Database {
         username = "root";
         password = "CB12FT_Java!";
         database = "eshop1";
-        server = "jdbc:mysql://localhost/" + database + "?useSSL=false&serverTimezone=Europe/Athens";
+        server = "jdbc:mysql://localhost:3306/" + database + "?useSSL=false&serverTimezone=Europe/Athens";
         try {
             con = DriverManager.getConnection(server, username, password);
             System.out.println("Connected!");
